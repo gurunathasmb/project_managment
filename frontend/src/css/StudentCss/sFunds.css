@@ -1,0 +1,210 @@
+/* Main layout */
+.student-dashboard-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.content-area {
+  flex: 1;
+  padding: 25px;
+  background-color: #f5f7fa;
+}
+
+.page-header {
+  margin-bottom: 30px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #333;
+}
+
+.section-title {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* Funds section layout */
+.funds-section {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 25px;
+}
+
+@media (min-width: 1024px) {
+  .funds-section {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto auto;
+  }
+  
+  .request-section {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+  }
+  
+  .expenditure-section {
+    grid-column: 2 / 3;
+    grid-row: 1 / 3;
+  }
+  
+  .transaction-section {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+  }
+}
+
+/* Funds containers */
+.funds-container {
+  background: #fff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.funds-container h3 {
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 18px;
+  color: #333;
+  font-weight: 600;
+}
+
+/* Form elements */
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #444;
+}
+
+.input-group {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.currency-prefix {
+  background-color: #f5f5f5;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  color: #555;
+  font-weight: 500;
+}
+
+.input-group input {
+  border-radius: 0 6px 6px 0 !important;
+  flex: 1;
+}
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: #7e3ff2;
+  box-shadow: 0 0 0 2px rgba(126, 63, 242, 0.1);
+}
+
+.submit-button {
+  background-color: #7e3ff2;
+  color: white;
+  padding: 12px 18px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.submit-button:hover {
+  background-color: #6e35d9;
+}
+
+/* Team expenditures */
+.team-expenditures {
+  display: flex;
+  flex-direction: column;
+}
+
+.team-row, .total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 14px 5px;
+  border-bottom: 1px solid #eee;
+}
+
+.team-name, .total-label {
+  font-weight: 500;
+  color: #444;
+}
+
+.team-amount, .total-amount {
+  font-family: monospace;
+  font-size: 15px;
+}
+
+.total-row {
+  border-bottom: none;
+  margin-top: 10px;
+  padding-top: 15px;
+  border-top: 1px solid #ddd;
+  font-weight: bold;
+}
+
+.total-label {
+  font-weight: 600;
+  color: #333;
+}
+
+.total-amount {
+  font-weight: 600;
+  color: #7e3ff2;
+}
+
+/* Transaction history */
+.transaction-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.transaction-table th,
+.transaction-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.transaction-table th {
+  font-weight: 500;
+  color: #666;
+  background-color: #f8f9fa;
+}
+
+.transaction-table tr:hover {
+  background-color: #f8f9fc;
+}
+
+.no-transactions {
+  color: #888;
+  text-align: center;
+  padding: 30px 0;
+  font-style: italic;
+}

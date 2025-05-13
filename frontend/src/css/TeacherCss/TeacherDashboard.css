@@ -1,0 +1,146 @@
+/* Add these styles to your TeacherDashboard.css file */
+
+.assigned-teams-section {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.no-teams-message {
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  margin-top: 16px;
+}
+
+.student-teams-list {
+  margin-top: 16px;
+}
+
+.student-team-card {
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+}
+
+.team-card-header {
+  padding: 14px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f0f2f5;
+  cursor: pointer;
+}
+
+.team-card-header h3 {
+  margin: 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.expand-icon {
+  font-size: 14px;
+  color: #666;
+}
+
+.team-card-details {
+  padding: 16px 20px;
+  border-top: 1px solid #eaeaea;
+}
+
+.team-members h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.team-members ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.team-members li {
+  padding: 6px 0;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #eee;
+}
+
+.team-members li:last-child {
+  border-bottom: none;
+}
+
+.team-actions {
+  display: flex;
+  margin-top: 16px;
+  gap: 10px;
+}
+
+.contact-team-button,
+.view-progress-button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.contact-team-button {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.view-progress-button {
+  background-color: #2196F3;
+  color: white;
+}
+
+.contact-team-button:hover,
+.view-progress-button:hover {
+  opacity: 0.9;
+}
+
+/* Updates Section */
+.updates-section {
+  margin-top: 24px;
+}
+
+.update-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.update-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+}
+
+.update-card h3 {
+  margin: 0 0 10px 0;
+  font-size: 16px;
+  color: #444;
+}
+
+.update-card p {
+  margin: 0;
+  color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .update-cards {
+    grid-template-columns: 1fr;
+  }
+}

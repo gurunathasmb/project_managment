@@ -1,0 +1,304 @@
+/* tProjectStatus.css */
+
+.project-Funds-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: #f5f7fa;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.project-content {
+  padding: 2rem;
+  flex: 1;
+}
+
+.project-content h1 {
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Status tabs styling */
+.status-tabs {
+  display: flex;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.tab-button {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #718096;
+  transition: all 0.2s ease;
+}
+
+.tab-button:hover {
+  color: #4a5568;
+}
+
+.tab-button.active {
+  color: #3182ce;
+  border-bottom: 2px solid #3182ce;
+  font-weight: 600;
+}
+
+/* Requests list styling */
+.requests-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.no-requests-message {
+  padding: 2rem;
+  text-align: center;
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  color: #718096;
+}
+
+.request-card {
+  background: white;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: box-shadow 0.3s ease;
+}
+
+.request-card:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.request-card.approved {
+  border-left: 4px solid #48bb78;
+}
+
+.request-card.rejected {
+  border-left: 4px solid #e53e3e;
+}
+
+.request-card.pending {
+  border-left: 4px solid #ecc94b;
+}
+
+.request-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  cursor: pointer;
+}
+
+.request-summary {
+  flex: 1;
+}
+
+.request-summary h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.request-meta {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.team-name {
+  font-size: 0.9rem;
+  color: #4a5568;
+}
+
+.request-amount {
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.status-badge.pending {
+  background-color: #fefcbf;
+  color: #744210;
+}
+
+.status-badge.approved {
+  background-color: #c6f6d5;
+  color: #22543d;
+}
+
+.status-badge.rejected {
+  background-color: #fed7d7;
+  color: #822727;
+}
+
+.expand-icon {
+  font-size: 0.9rem;
+  color: #718096;
+}
+
+/* Request details when expanded */
+.request-details {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  border-top: 1px solid #edf2f7;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.detail-row {
+  margin-top: 1rem;
+}
+
+.detail-label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #718096;
+  margin-bottom: 0.25rem;
+}
+
+.detail-value {
+  color: #2d3748;
+}
+
+.request-description {
+  background-color: #f7fafc;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  margin: 0.5rem 0;
+  line-height: 1.5;
+}
+
+/* Decision section */
+.decision-section {
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.notes-input label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #718096;
+  margin-bottom: 0.5rem;
+}
+
+.notes-input textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.25rem;
+  font-family: inherit;
+  resize: vertical;
+  margin-bottom: 1rem;
+}
+
+.notes-input textarea:focus {
+  outline: none;
+  border-color: #3182ce;
+  box-shadow: 0 0 0 3px rgba(49, 130, 206, 0.1);
+}
+
+.decision-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+}
+
+.decision-buttons button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 0.25rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.approve-button {
+  background-color: #38a169;
+  color: white;
+}
+
+.approve-button:hover {
+  background-color: #2f855a;
+}
+
+.reject-button {
+  background-color: #e53e3e;
+  color: white;
+}
+
+.reject-button:hover {
+  background-color: #c53030;
+}
+
+/* Decision info for completed requests */
+.decision-info {
+  margin-top: 1rem;
+  padding: 1rem;
+  background-color: #f7fafc;
+  border-radius: 0.25rem;
+}
+
+.decision-notes {
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  background-color: white;
+  border-radius: 0.25rem;
+  border-left: 3px solid #cbd5e0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .project-content {
+    padding: 1rem;
+  }
+  
+  .status-tabs {
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-bottom: 0.5rem;
+  }
+  
+  .tab-button {
+    padding: 0.5rem 1rem;
+  }
+  
+  .decision-buttons {
+    flex-direction: column;
+  }
+  
+  .decision-buttons button {
+    width: 100%;
+  }
+  
+  .request-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}

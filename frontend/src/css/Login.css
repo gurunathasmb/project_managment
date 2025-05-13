@@ -1,0 +1,337 @@
+*,
+::before,
+::after {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #141e30 0%, #243b55 100%);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Background animations */
+body::before,
+body::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  background: rgba(123, 31, 162, 0.1);
+  z-index: -1;
+}
+
+body::before {
+  top: -150px;
+  right: -100px;
+  animation: float 15s infinite alternate ease-in-out;
+}
+
+body::after {
+  bottom: -150px;
+  left: -100px;
+  background: rgba(25, 118, 210, 0.1);
+  animation: float 20s infinite alternate-reverse ease-in-out;
+}
+
+@keyframes float {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(50px, 25px) scale(1.05);
+  }
+  100% {
+    transform: translate(10px, 50px) scale(0.95);
+  }
+}
+
+.container {
+  background-color: white;
+  padding: 32px 40px;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 380px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
+  position: relative;
+  overflow: hidden;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, #9c27b0 0%, #7b1fa2 100%);
+}
+
+.container.teacher::before {
+  background: linear-gradient(90deg, #2e7d32 0%, #1b5e20 100%);
+}
+
+.container > h1 {
+  margin-bottom: 25px;
+  color: #333;
+  text-align: center;
+  font-size: 28px;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.container > h1::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 3px;
+  background: #9c27b0;
+  border-radius: 2px;
+}
+
+.container.teacher > h1::after {
+  background: #2e7d32;
+}
+
+.container > form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.container div {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.container label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #555;
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+
+.container input {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s ease;
+  background-color: #f5f5f5;
+}
+
+.container input:focus {
+  border-color: #9c27b0;
+  box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.1);
+  background-color: #fff;
+  animation: pulse 1s;
+}
+
+.container.teacher input:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(156, 39, 176, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(156, 39, 176, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(156, 39, 176, 0);
+  }
+}
+
+.container.teacher input:focus {
+  animation: pulseGreen 1s;
+}
+
+@keyframes pulseGreen {
+  0% {
+    box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(46, 125, 50, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(46, 125, 50, 0);
+  }
+}
+
+.container input::placeholder {
+  font-size: 14px;
+  color: #aaa;
+  font-style: italic;
+}
+
+.container select {
+  width: 100%;
+  font-size: 16px;
+  padding: 12px 15px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #f5f5f5;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23555' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 15px center;
+  background-size: 15px;
+}
+
+.container select:focus {
+  border-color: #9c27b0;
+  box-shadow: 0 0 0 3px rgba(156, 39, 176, 0.1);
+  background-color: #fff;
+}
+
+.container.teacher select:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.container button {
+  background: linear-gradient(90deg, #9c27b0, #7b1fa2);
+  border: none;
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  margin: 10px 0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.container button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: all 0.5s;
+  z-index: -1;
+}
+
+.container button:hover::before {
+  left: 100%;
+}
+
+.container button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(123, 31, 162, 0.3);
+}
+
+.container.teacher button {
+  background: linear-gradient(90deg, #2e7d32, #1b5e20);
+}
+
+.container.teacher button:hover {
+  box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+}
+
+.container > form > span {
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-top: 15px;
+}
+
+.container > form > span a {
+  color: #9c27b0;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.container > form > span a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background-color: #9c27b0;
+  transition: width 0.3s ease;
+}
+
+.container > form > span a:hover::after {
+  width: 100%;
+}
+
+.container.teacher > form > span a {
+  color: #2e7d32;
+}
+
+.container.teacher > form > span a::after {
+  background-color: #2e7d32;
+}
+
+/* Particle animation for background */
+.particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  animation: float-particle 15s infinite linear;
+}
+
+@keyframes float-particle {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+    border-radius: 0;
+  }
+  100% {
+    transform: translateY(-1000px) rotate(720deg);
+    opacity: 0;
+    border-radius: 50%;
+  }
+}

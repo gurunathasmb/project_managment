@@ -1,0 +1,310 @@
+/* Main layout styles */
+.chat-layout {
+  display: flex;
+  height: calc(100vh - 140px);
+  background-color: #f5f7fb;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-top: 20px;
+  color: #000; /* Ensuring all text is black by default */
+}
+
+/* Contacts panel */
+.contacts-panel {
+  width: 280px;
+  background-color: #fff;
+  border-right: 1px solid #e1e4e8;
+  display: flex;
+  flex-direction: column;
+}
+
+.contacts-header {
+  padding: 15px;
+  border-bottom: 1px solid #e1e4e8;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.contacts-header h2 {
+  margin: 0;
+  color: #000;
+  font-size: 18px;
+}
+
+.add-contact-button {
+  background-color: #6366F1;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 8px 15px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.add-contact-button:hover {
+  background-color: #4F46E5;
+}
+
+/* Contact list */
+.contacts-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.contact-item {
+  display: flex;
+  padding: 12px 15px;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.contact-item:hover {
+  background-color: #f8f9fa;
+}
+
+.contact-item.selected {
+  background-color: #EEF2FF;
+  border-left: 3px solid #6366F1;
+}
+
+.contact-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.contact-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.contact-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.contact-name {
+  font-weight: 500;
+  color: #000;
+  margin-bottom: 4px;
+}
+
+.contact-email {
+  font-size: 12px;
+  color: #666;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* New contact form */
+.new-contact-form {
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e1e4e8;
+}
+
+.new-contact-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.new-contact-form input {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  color: #000;
+}
+
+.form-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.form-buttons button {
+  flex: 1;
+  padding: 8px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.form-buttons button[type="submit"] {
+  background-color: #6366F1;
+  color: white;
+}
+
+.form-buttons button[type="button"] {
+  background-color: #e0e0e0;
+  color: #333;
+}
+
+/* Chat area */
+.chat-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+}
+
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e1e4e8;
+  background-color: #fff;
+}
+
+.messages-container {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f5f7fb;
+  display: flex;
+  flex-direction: column;
+}
+
+.message {
+  max-width: 70%;
+  margin-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.message.sent {
+  align-self: flex-end;
+}
+
+.message.received {
+  align-self: flex-start;
+}
+
+.message-bubble {
+  padding: 10px 15px;
+  border-radius: 18px;
+  color: #000;
+  word-break: break-word;
+}
+
+.message.sent .message-bubble {
+  background-color: #6366F1;
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.message.received .message-bubble {
+  background-color: #e9ecef;
+  border-bottom-left-radius: 4px;
+}
+
+.message-time {
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+  align-self: flex-end;
+}
+
+.no-messages {
+  text-align: center;
+  color: #999;
+  margin-top: 40px;
+}
+
+.no-contact-selected {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f5f7fb;
+}
+
+.placeholder-message {
+  color: #666;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* Message input form */
+.message-input-form {
+  display: flex;
+  padding: 15px;
+  background-color: #fff;
+  border-top: 1px solid #e1e4e8;
+}
+
+.message-input-form input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  margin-right: 10px;
+  color: #000;
+}
+
+.message-input-form button {
+  background-color: #6366F1;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.message-input-form button:hover {
+  background-color: #4F46E5;
+}
+
+/* Maintain existing styles from original discussion-thread */
+.discussion-thread {
+  background-color: white;
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 5px rgba(0,0,0,0.08);
+}
+
+.discussion-thread h4 {
+  color: #333;
+}
+
+.discussion-thread p {
+  margin: 8px 0;
+  color: #000;
+}
+
+/* Content area styling */
+.content-area {
+  padding: 20px;
+  color: #000;
+}
+
+.content-area h1 {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+/* Make sure all text inputs have proper contrast */
+input, textarea, button {
+  font-family: inherit;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .chat-layout {
+    flex-direction: column;
+    height: auto;
+  }
+  
+  .contacts-panel {
+    width: 100%;
+    height: 300px;
+  }
+}
