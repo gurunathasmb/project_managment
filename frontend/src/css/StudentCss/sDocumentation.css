@@ -1,0 +1,217 @@
+/* sDocumentation.css */
+
+.documentation-content {
+  padding: 20px;
+  background-color: #f9f9f9;
+  min-height: calc(100vh - 60px);
+}
+
+.documentation-header {
+  margin-bottom: 30px;
+}
+
+.documentation-header h1 {
+  font-size: 24px;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.documentation-header h2 {
+  font-size: 32px;
+  margin-top: 0;
+  color: #2c5282;
+  font-weight: 600;
+}
+
+.teacher-info {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #555;
+  background-color: #e6f0ff;
+  padding: 8px 12px;
+  border-radius: 4px;
+  border-left: 4px solid #3182ce;
+}
+
+.documentation-tools {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.primary-button, .secondary-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.primary-button {
+  background-color: #3182ce;
+  color: #fff;
+}
+
+.primary-button:hover {
+  background-color: #2b6cb0;
+}
+
+.secondary-button {
+  background-color: #e2e8f0;
+  color: #4a5568;
+}
+
+.secondary-button:hover {
+  background-color: #cbd5e0;
+}
+
+.plus-icon {
+  margin-right: 5px;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.folder-container {
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.folder-row {
+  display: flex;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.folder-row.header {
+  background-color: #f7fafc;
+  font-weight: 600;
+  color: #4a5568;
+  padding: 12px 16px;
+}
+
+.folder-row.even {
+  background-color: #fff;
+}
+
+.folder-row.odd {
+  background-color: #f8fafc;
+}
+
+.folder-column {
+  padding: 0 10px;
+}
+
+.folder-column.name {
+  flex: 2;
+  display: flex;
+  align-items: center;
+}
+
+.folder-column.type,
+.folder-column.date {
+  flex: 1;
+}
+
+.folder-column.actions {
+  flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.icon-file,
+.icon-folder {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+.icon-file {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='16' y1='13' x2='8' y2='13'/%3E%3Cline x1='16' y1='17' x2='8' y2='17'/%3E%3Cpolyline points='10 9 9 9 8 9'/%3E%3C/svg%3E");
+}
+
+.icon-folder {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%234A5568' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z'/%3E%3C/svg%3E");
+}
+
+.action-button {
+  padding: 6px 12px;
+  background-color: #e2e8f0;
+  color: #4a5568;
+  border: none;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.action-button:hover {
+  background-color: #cbd5e0;
+}
+
+.action-button.delete {
+  background-color: #fed7d7;
+  color: #e53e3e;
+}
+
+.action-button.delete:hover {
+  background-color: #feb2b2;
+}
+
+.notification {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #2c5282;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  animation: fadeIn 0.3s, fadeOut 0.3s 2.7s;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(20px); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .folder-column.type,
+  .folder-column.date {
+    display: none;
+  }
+
+  .folder-column.name {
+    flex: 1;
+  }
+
+  .folder-column.actions {
+    flex: 1;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
