@@ -9,7 +9,8 @@ function Signup() {
         name: '',
         email: '',
         password: '',
-        role: 'student' // default role
+        role: 'student', // default role
+        semester: '1' // default semester
     });
 
     const navigate = useNavigate();
@@ -21,9 +22,14 @@ function Signup() {
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        const { name, email, password, role } = signupInfo;
+        const { name, email, password, role, semester } = signupInfo;
         if (!name || !email || !password || !role) {
             return handleError('All fields are required');
+        }
+
+        // Validate semester for students
+        if (role === 'student' && !semester) {
+            return handleError('Please select your semester');
         }
 
         try {
@@ -32,7 +38,10 @@ function Signup() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(signupInfo)
+                body: JSON.stringify({
+                    ...signupInfo,
+                    semester: role === 'student' ? parseInt(semester) : undefined
+                })
             });
             const result = await response.json();
             const { success, message, error } = result;
@@ -52,7 +61,6 @@ function Signup() {
 
     return (
         <div className={`container ${signupInfo.role}`}>
-
             <h1>Signup</h1>
             <form onSubmit={handleSignup}>
                 <div>
@@ -92,11 +100,22 @@ function Signup() {
                         <option value='teacher'>Teacher</option>
                     </select>
                 </div>
+                {signupInfo.role === 'student' && (
+                    <div>
+                        <label>Semester</label>
+                        <select name='semester' onChange={handleChange} value={signupInfo.semester}>
+                            {[1, 2, 3, 4, 5, 6, 7, 8].map(sem => (
+                                <option key={sem} value={sem}>
+                                    {sem}{sem === 1 ? 'st' : sem === 2 ? 'nd' : sem === 3 ? 'rd' : 'th'} Semester
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                )}
                 <button type='submit'>Signup</button>
                 <span>Already have an account? <Link to="/login">Login</Link></span>
             </form>
             <ToastContainer />
-
         </div>
     );
 }
