@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
-const ProjectUpdateSchema = new mongoose.Schema({
+const projectUpdateSchema = new mongoose.Schema({
   studentId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   teacherId: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  projectTitle: { type: String },
+  projectName: { type: String, required: true },
   message: { type: String, required: true },
   comments: [
     {
@@ -14,4 +14,4 @@ const ProjectUpdateSchema = new mongoose.Schema({
   ]
 }, { timestamps: true });
 
-module.exports = mongoose.model('ProjectUpdate', ProjectUpdateSchema);
+module.exports = mongoose.model('ProjectUpdate', projectUpdateSchema);

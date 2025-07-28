@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 // Signup Controller
 const signup = async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, semester } = req.body;
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
@@ -19,8 +19,19 @@ const signup = async (req, res) => {
         // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Create new user
-        const newUser = new User({ name, email, password: hashedPassword, role });
+        // Create new user with semester if student
+        const userData = {
+            name,
+            email,
+            password: hashedPassword,
+            role
+        };
+
+        if (role === 'student') {
+            userData.semester = semester;
+        }
+
+        const newUser = new User(userData);
         await newUser.save();
 
         res.status(201).json({

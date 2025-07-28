@@ -9,6 +9,8 @@ const TProjectStatus = () => {
   const [studentUpdates, setStudentUpdates] = useState([]);
   const [selectedUpdate, setSelectedUpdate] = useState(null);
   const [commentText, setCommentText] = useState('');
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSending, setIsSending] = useState(false);
   const token = localStorage.getItem('token');
 
   useEffect(() => {
@@ -21,22 +23,34 @@ const TProjectStatus = () => {
 
   const fetchStudentUpdates = async () => {
     try {
+      setIsLoading(true);
       const response = await fetch('http://localhost:8000/api/teacher/student-updates', {
         headers: { Authorization: `Bearer ${token}` }
       });
       const result = await response.json();
       if (result.success && Array.isArray(result.updates)) {
-        // If using populate, student name may be inside studentId
-        const formattedUpdates = result.updates.map(update => ({
-          ...update,
-          studentName: update.studentId?.name || 'Unknown Student',
-        }));
+        const formattedUpdates = result.updates
+          .map(update => ({
+            ...update,
+            studentName: update.studentId?.name || 'Unknown Student',
+          }))
+          .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)); // Sort by newest first
         setStudentUpdates(formattedUpdates);
+        
+        // If there's a selected update, update its data
+        if (selectedUpdate) {
+          const updatedSelectedUpdate = formattedUpdates.find(u => u._id === selectedUpdate._id);
+          if (updatedSelectedUpdate) {
+            setSelectedUpdate(updatedSelectedUpdate);
+          }
+        }
       } else {
         handleError(result.message || 'Unexpected response format');
       }
     } catch (error) {
       handleError('Failed to fetch student updates');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -52,18 +66,33 @@ const TProjectStatus = () => {
     setCommentText('');
   };
 
+  const formatDate = (dateString) => {
+    const options = { 
+      year: 'numeric', 
+      month: 'short', 
+      day: 'numeric',
+      hour: '2-digit', 
+      minute: '2-digit'
+    };
+    return new Date(dateString).toLocaleDateString('en-US', options);
+  };
+
   const sendComment = async () => {
     if (!commentText.trim() || !selectedUpdate) {
       return handleError('Please select an update and write a comment');
     }
 
     try {
+      setIsSending(true);
       const response = await fetch('http://localhost:8000/api/teacher/send-comment', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        headers: { 
+          'Content-Type': 'application/json', 
+          Authorization: `Bearer ${token}` 
+        },
         body: JSON.stringify({
           updateId: selectedUpdate._id,
-          comment: commentText
+          comment: commentText.trim()
         })
       });
 
@@ -71,12 +100,26 @@ const TProjectStatus = () => {
       if (result.success) {
         handleSuccess('Comment sent successfully!');
         setCommentText('');
-        fetchStudentUpdates();
+        
+        // Update the local state with the new comment
+        if (result.update) {
+          setSelectedUpdate(result.update);
+          setStudentUpdates(prevUpdates => 
+            prevUpdates.map(update => 
+              update._id === result.update._id ? result.update : update
+            )
+          );
+        } else {
+          // Fallback to fetching all updates if the server doesn't return the updated project
+          await fetchStudentUpdates();
+        }
       } else {
         handleError(result.message);
       }
     } catch (error) {
       handleError('Failed to send comment');
+    } finally {
+      setIsSending(false);
     }
   };
 
@@ -84,16 +127,21 @@ const TProjectStatus = () => {
     <div className="teacher-dashboard-container">
       <Sidebar onLogout={handleLogout} />
       <div className="content-area">
-        <h1>Welcome, {loggedInUser?.name}</h1>
+        <h1>Project Status Updates</h1>
 
         <div className="student-updates-section">
-          <h2>Student Project Updates</h2>
+          <h2>Student Updates & Feedback</h2>
 
           <div className="updates-container">
             <div className="updates-list">
-              <h3>Updates from Students</h3>
-              {studentUpdates.length === 0 ? (
-                <p>No updates from students yet.</p>
+              <h3>Recent Updates</h3>
+              {isLoading ? (
+                <div className="loading-state">Loading updates...</div>
+              ) : studentUpdates.length === 0 ? (
+                <div className="empty-state">
+                  <p>No updates from students yet.</p>
+                  <span>New updates will appear here when students send them.</span>
+                </div>
               ) : (
                 <ul className="student-updates">
                   {studentUpdates.map((update) => (
@@ -104,9 +152,17 @@ const TProjectStatus = () => {
                     >
                       <div className="update-header">
                         <strong>{update.studentName}</strong>
-                        <span className="timestamp">{new Date(update.createdAt).toLocaleString()}</span>
+                        <span className="timestamp">{formatDate(update.createdAt)}</span>
                       </div>
-                      <p className="update-preview">{update.message?.substring(0, 50) || ''}...</p>
+                      <p className="update-preview">
+                        {update.message?.substring(0, 100)}
+                        {update.message?.length > 100 ? '...' : ''}
+                      </p>
+                      {update.comments?.length > 0 && (
+                        <div className="comment-count">
+                          {update.comments.length} comment{update.comments.length !== 1 ? 's' : ''}
+                        </div>
+                      )}
                     </li>
                   ))}
                 </ul>
@@ -119,7 +175,7 @@ const TProjectStatus = () => {
                   <h3>Update from {selectedUpdate.studentName}</h3>
                   <div className="update-metadata">
                     <p><strong>Project:</strong> {selectedUpdate.projectTitle || 'Not specified'}</p>
-                    <p><strong>Sent on:</strong> {new Date(selectedUpdate.createdAt).toLocaleString()}</p>
+                    <p><strong>Sent on:</strong> {formatDate(selectedUpdate.createdAt)}</p>
                   </div>
                   <div className="update-message">
                     <p>{selectedUpdate.message}</p>
@@ -133,7 +189,7 @@ const TProjectStatus = () => {
                           <li key={index} className="comment-item">
                             <div className="comment-header">
                               <strong>{comment.sender === 'teacher' ? 'You' : selectedUpdate.studentName}</strong>
-                              <span className="timestamp">{new Date(comment.timestamp).toLocaleString()}</span>
+                              <span className="timestamp">{formatDate(comment.timestamp)}</span>
                             </div>
                             <p className="comment-text">{comment.text}</p>
                           </li>
@@ -151,13 +207,21 @@ const TProjectStatus = () => {
                       onChange={(e) => setCommentText(e.target.value)}
                       placeholder="Write your feedback to the student..."
                       rows={4}
+                      disabled={isSending}
                     />
-                    <button onClick={sendComment} className="submit-button">Send Comment</button>
+                    <button 
+                      onClick={sendComment} 
+                      className="submit-button"
+                      disabled={!commentText.trim() || isSending}
+                    >
+                      {isSending ? 'Sending...' : 'Send Comment'}
+                    </button>
                   </div>
                 </div>
               ) : (
                 <div className="no-update-selected">
-                  <p>Select an update from the list to view details and respond.</p>
+                  <p>Select an update from the list to view details and respond</p>
+                  <span>You can provide feedback and track student progress here</span>
                 </div>
               )}
             </div>

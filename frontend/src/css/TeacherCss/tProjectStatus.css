@@ -2,222 +2,403 @@
 .teacher-dashboard-container {
   display: flex;
   min-height: 100vh;
+  background-color: #f0f2f5;
+  overflow: hidden; /* Prevent double scrollbars */
 }
 
 .content-area {
   flex: 1;
-  padding: 20px;
-  background-color: #f5f5f5;
+  padding: 2rem;
+  background-color: #f0f2f5;
+  overflow-y: auto; /* Make the main content area scrollable */
+  height: 100vh;
 }
 
 .content-area h1 {
-  margin-bottom: 25px;
-  color: #333;
-  border-bottom: 2px solid #e1e1e1;
-  padding-bottom: 10px;
+  margin-bottom: 1.5rem;
+  color: #1e293b;
+  font-size: 1.875rem;
+  font-weight: 600;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid #e2e8f0;
+  position: sticky;
+  top: 0;
+  background-color: #f0f2f5;
+  z-index: 10;
 }
 
 .student-updates-section {
   background-color: white;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  border-radius: 0.75rem;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+  margin-bottom: 2rem;
 }
 
 .student-updates-section h2 {
-  color: #333;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #e1e1e1;
-  padding-bottom: 10px;
+  color: #1e293b;
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e2e8f0;
 }
 
 .updates-container {
   display: flex;
-  gap: 20px;
-  min-height: 500px;
+  gap: 2rem;
+  min-height: calc(100vh - 200px); /* Adjust height to account for header */
 }
 
 .updates-list {
   flex: 1;
-  border-right: 1px solid #e1e1e1;
-  padding-right: 20px;
+  border-right: 1px solid #e2e8f0;
+  padding-right: 1.5rem;
   overflow-y: auto;
-  max-height: 600px;
+  max-height: calc(100vh - 250px); /* Adjust for better scrolling */
 }
 
 .updates-list h3 {
-  margin-bottom: 15px;
-  color: #444;
+  margin-bottom: 1rem;
+  color: #1e293b;
+  font-weight: 600;
 }
 
 .student-updates {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .update-item {
-  background-color: #f9f9f9;
-  border-radius: 6px;
-  padding: 15px;
-  margin-bottom: 10px;
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.2s ease;
 }
 
 .update-item:hover {
-  background-color: #f0f0f0;
+  background-color: #f1f5f9;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
 .update-item.selected {
-  background-color: #e8f4fd;
-  border-left: 3px solid #4a90e2;
+  background-color: #eff6ff;
+  border-left: 3px solid #3b82f6;
 }
 
 .update-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.update-header strong {
+  color: #1e293b;
+  font-weight: 600;
 }
 
 .timestamp {
-  color: #777;
-  font-size: 12px;
+  color: #64748b;
+  font-size: 0.875rem;
 }
 
 .update-preview {
-  color: #666;
+  color: #4b5563;
   margin: 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 0.9375rem;
 }
 
 .update-details {
   flex: 2;
-  padding-left: 20px;
+  padding-left: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 250px); /* Match updates-list height */
 }
 
 .no-update-selected {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 300px;
-  color: #777;
-  background-color: #f9f9f9;
-  border-radius: 6px;
+  height: 400px;
+  color: #64748b;
+  background-color: #f8fafc;
+  border-radius: 0.75rem;
+  border: 2px dashed #e2e8f0;
+  text-align: center;
+  padding: 2rem;
+}
+
+.no-update-selected p {
+  font-size: 1.125rem;
+  margin-bottom: 1rem;
 }
 
 .selected-update {
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 6px;
+  height: 100%;
+  overflow-y: auto;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 .selected-update h3 {
-  margin-bottom: 15px;
-  color: #333;
+  margin-bottom: 1rem;
+  color: #1e293b;
+  font-weight: 600;
 }
 
 .update-metadata {
-  background-color: #eef5fd;
-  padding: 10px;
-  border-radius: 4px;
-  margin-bottom: 15px;
+  background-color: #f8fafc;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid #e2e8f0;
 }
 
 .update-metadata p {
-  margin: 5px 0;
+  margin: 0.5rem 0;
+  color: #4b5563;
+}
+
+.update-metadata strong {
+  color: #1e293b;
 }
 
 .update-message {
-  background-color: white;
-  padding: 15px;
-  border-radius: 4px;
-  border-left: 3px solid #4a90e2;
-  margin-bottom: 20px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  background-color: #ffffff;
+  padding: 1.25rem;
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #3b82f6;
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.update-message p {
+  margin: 0;
+  color: #1e293b;
 }
 
 .previous-comments {
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
+  max-height: calc(100vh - 500px); /* Adjust to leave space for comment form */
+  overflow-y: auto;
 }
 
 .previous-comments h4 {
-  margin-bottom: 10px;
-  color: #444;
+  margin-bottom: 1rem;
+  color: #1e293b;
+  font-weight: 600;
 }
 
 .comments-list {
   list-style: none;
   padding: 0;
+  margin: 0;
 }
 
 .comment-item {
-  background-color: #fff;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
-  border-left: 3px solid #4a90e2;
+  background-color: #f8fafc;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-left: 3px solid #3b82f6;
 }
 
 .comment-header {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 5px;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.comment-header strong {
+  color: #1e293b;
+  font-weight: 600;
 }
 
 .comment-text {
   margin: 0;
-  color: #333;
+  color: #4b5563;
+  line-height: 1.5;
 }
 
 .comment-form h4 {
-  margin-bottom: 10px;
-  color: #444;
+  margin-bottom: 0.75rem;
+  color: #1e293b;
+  font-weight: 600;
 }
 
 .comment-form textarea {
   width: 100%;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
   resize: vertical;
-  margin-bottom: 10px;
-  font-size: 14px;
-  min-height: 100px;
+  margin-bottom: 1rem;
+  font-size: 0.9375rem;
+  min-height: 120px;
+  transition: border-color 0.2s ease;
+}
+
+.comment-form textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .submit-button {
-  background-color: #4a90e2;
+  background-color: #3b82f6;
   color: white;
   border: none;
-  padding: 10px 15px;
-  border-radius: 4px;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 500;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.3s;
+  transition: all 0.2s ease;
 }
 
 .submit-button:hover {
-  background-color: #3a7bc8;
+  background-color: #2563eb;
+  transform: translateY(-1px);
 }
 
-/* Responsive adjustments */
-@media (max-width: 992px) {
+.submit-button:active {
+  transform: translateY(0);
+}
+
+/* Scrollbar Styling */
+.updates-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.updates-list::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+.updates-list::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+.updates-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
   .updates-container {
     flex-direction: column;
+    height: auto;
   }
   
-  .updates-list {
-    border-right: none;
-    border-bottom: 1px solid #e1e1e1;
-    padding-right: 0;
-    padding-bottom: 15px;
-    max-height: 300px;
+  .updates-list,
+  .update-details {
+    max-height: 500px; /* Fixed height for mobile */
+    overflow-y: auto;
   }
   
   .update-details {
     padding-left: 0;
-    padding-top: 15px;
+    margin-top: 1rem;
   }
+}
+
+@media (max-width: 640px) {
+  .content-area {
+    padding: 1rem;
+  }
+  
+  .student-updates-section {
+    padding: 1rem;
+  }
+  
+  .update-item {
+    padding: 0.75rem;
+  }
+  
+  .selected-update {
+    padding: 1rem;
+  }
+}
+
+.comment-count {
+  margin-top: 0.5rem;
+  font-size: 0.875rem;
+  color: #6366f1;
+  font-weight: 500;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+  color: #6366f1;
+  font-size: 0.9375rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 2rem;
+  background-color: #f8fafc;
+  border-radius: 0.5rem;
+  border: 2px dashed #e2e8f0;
+}
+
+.empty-state p {
+  color: #1e293b;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.empty-state span {
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Update disabled state styles */
+.submit-button:disabled {
+  background-color: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.comment-form textarea:disabled {
+  background-color: #f1f5f9;
+  cursor: not-allowed;
+}
+
+/* Add loading indicator */
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+.loading-state {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Add these new styles at the end */
+.comment-form {
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  padding: 1rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
 }
