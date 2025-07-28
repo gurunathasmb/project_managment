@@ -58,12 +58,22 @@ router.post('/project-status/update', verifyToken, verifyRole('teacher'), async 
 });
 
 // ========================== DOCUMENTATION ==========================
-router.get('/documents', verifyToken, verifyRole('teacher'), async (req, res) => {
+router.get('/documentation', verifyToken, verifyRole('teacher'), async (req, res) => {
   try {
-    const docs = await Documentation.find({ sharedWithTeachers: req.user._id });
+    const docs = await Documentation.find({
+      sharedWithTeachers: req.user._id
+    })
+    .populate('studentId', 'name email')
+    .populate('sharedWithTeachers', 'name email')
+    .sort({ createdAt: -1 });
+
     res.json({ success: true, docs });
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching documents' });
+  } catch (err) {
+    console.error('Fetch docs error:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to fetch documentation' 
+    });
   }
 });
 
@@ -186,25 +196,159 @@ router.get('/student-updates', verifyToken, verifyRole('teacher'), async (req, r
   }
 });
 
-
-
+// Add comment to project update
 router.post('/send-comment', verifyToken, verifyRole('teacher'), async (req, res) => {
   const { updateId, comment } = req.body;
+  
+  if (!updateId || !comment) {
+    return res.status(400).json({ 
+      success: false, 
+      message: 'Update ID and comment are required' 
+    });
+  }
 
   try {
-    const project = await ProjectUpdate.findById(updateId);
-    if (!project) return res.status(404).json({ success: false, message: 'Project not found' });
+    const update = await ProjectUpdate.findById(updateId);
+    if (!update) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Project update not found' 
+      });
+    }
 
-    project.comments.push({
-      text: comment,
+    // Add the new comment
+    update.comments.push({
       sender: 'teacher',
+      text: comment,
       timestamp: new Date()
     });
 
-    await project.save();
-    res.json({ success: true, message: 'Comment added' });
+    await update.save();
+
+    // Return the updated project with populated fields
+    const updatedProject = await ProjectUpdate.findById(updateId)
+      .populate('studentId', 'name email')
+      .populate('teacherId', 'name email');
+
+    res.json({ 
+      success: true, 
+      message: 'Comment added successfully',
+      update: updatedProject
+    });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Comment failed' });
+    console.error('Error adding comment:', error);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Error adding comment to project update' 
+    });
+  }
+});
+
+// Download document
+router.get('/documentation/download/:id', verifyToken, verifyRole('teacher'), async (req, res) => {
+  try {
+    const doc = await Documentation.findOne({
+      _id: req.params.id,
+      sharedWithTeachers: req.user._id
+    });
+
+    if (!doc) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Document not found' 
+      });
+    }
+
+    res.download(doc.filePath, doc.fileName);
+  } catch (err) {
+    console.error('Download error:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to download file' 
+    });
+  }
+});
+
+// Add comment to document
+router.post('/documentation/comment/:id', verifyToken, verifyRole('teacher'), async (req, res) => {
+  try {
+    const { comment } = req.body;
+    if (!comment) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Comment is required' 
+      });
+    }
+
+    const doc = await Documentation.findOne({
+      _id: req.params.id,
+      sharedWithTeachers: req.user._id
+    });
+
+    if (!doc) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Document not found' 
+      });
+    }
+
+    doc.teacherComments.push({
+      teacherId: req.user._id,
+      comment,
+      timestamp: new Date()
+    });
+
+    await doc.save();
+
+    res.json({ 
+      success: true, 
+      message: 'Comment added successfully' 
+    });
+  } catch (err) {
+    console.error('Comment error:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to add comment' 
+    });
+  }
+});
+
+// Update document status
+router.put('/documentation/status/:id', verifyToken, verifyRole('teacher'), async (req, res) => {
+  try {
+    const { status } = req.body;
+    if (!status || !['pending', 'reviewed', 'approved', 'rejected'].includes(status)) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Invalid status' 
+      });
+    }
+
+    const doc = await Documentation.findOne({
+      _id: req.params.id,
+      sharedWithTeachers: req.user._id
+    });
+
+    if (!doc) {
+      return res.status(404).json({ 
+        success: false, 
+        message: 'Document not found' 
+      });
+    }
+
+    doc.status = status;
+    await doc.save();
+
+    res.json({ 
+      success: true, 
+      message: 'Status updated successfully' 
+    });
+  } catch (err) {
+    console.error('Status update error:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to update status' 
+    });
   }
 });
 

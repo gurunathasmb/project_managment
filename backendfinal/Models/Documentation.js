@@ -1,7 +1,7 @@
 // Models/Documentation.js
 const mongoose = require('mongoose');
 
-const DocumentationSchema = new mongoose.Schema({
+const documentationSchema = new mongoose.Schema({
   studentId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User', // Assuming you have a User model
@@ -19,14 +19,34 @@ const DocumentationSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  uploadedAt: {
-    type: Date,
-    default: Date.now
-  },
   sharedWithTeachers: [{  // store the teachers whom file is shared to
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+  }],
+  description: {
+    type: String,
+    default: ''
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'reviewed', 'approved', 'rejected'],
+    default: 'pending'
+  },
+  teacherComments: [{
+    teacherId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+      required: true
+    },
+    comment: {
+      type: String,
+      required: true
+    },
+    timestamp: {
+      type: Date,
+      default: Date.now
+    }
   }]
-});
+}, { timestamps: true });
 
-module.exports = mongoose.model('Documentation', DocumentationSchema);
+module.exports = mongoose.model('Documentation', documentationSchema);

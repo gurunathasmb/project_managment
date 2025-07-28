@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const multer = require('multer');
 const path = require('path');
+const fs = require('fs');
 
 const { verifyToken, verifyRole } = require('../Middlewares/AuthMiddleware');
 const Project = require('../Models/Project');
@@ -72,34 +73,57 @@ router.get('/project-status', studentAccess, async (req, res) => {
 // -------------------- Send Status Update --------------------
 router.post('/send-status-update', studentAccess, async (req, res) => {
   try {
-    const { teacherId, message, projectTitle } = req.body;
+    const { teacherId, message, projectName } = req.body;
+    console.log('Received status update:', { teacherId, message, projectName }); // Debug log
+    
+    if (!teacherId || !message || !projectName) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Teacher, message, and project name are required' 
+      });
+    }
+
     const update = await ProjectUpdate.create({
       studentId: req.user._id,
       teacherId,
-      projectTitle,
+      projectName,
       message,
       comments: []
     });
-    res.json({ success: true, message: 'Status update sent', updateId: update._id });
+    
+    console.log('Created update:', update); // Debug log
+    
+    res.json({ 
+      success: true, 
+      message: 'Status update sent', 
+      updateId: update._id 
+    });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ success: false, message: 'Failed to send status update' });
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to send status update' 
+    });
   }
 });
 
 // -------------------- Get Project Updates --------------------
 router.get('/project-updates', studentAccess, async (req, res) => {
   try {
-    const updates = await ProjectUpdate.find({ studentId: req.user._id }).populate('teacherId', 'name email');
+    const updates = await ProjectUpdate.find({ studentId: req.user._id })
+      .populate('teacherId', 'name email')
+      .sort({ createdAt: -1 });
+    
     const formatted = updates.map(update => ({
       _id: update._id,
       message: update.message,
-      projectTitle: update.projectTitle,
+      projectName: update.projectName || 'Untitled Project',
       teacherName: update.teacherId.name,
       teacherId: update.teacherId._id,
       comments: update.comments,
       createdAt: update.createdAt
     }));
+    
     res.json({ success: true, updates: formatted });
   } catch (err) {
     console.error(err);
@@ -107,47 +131,126 @@ router.get('/project-updates', studentAccess, async (req, res) => {
   }
 });
 
-// -------------------- Upload Documentation --------------------
+// Configure multer for file upload
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, path.join(__dirname, '../uploads')),
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+  destination: function (req, file, cb) {
+    const uploadDir = path.join(__dirname, '../uploads');
+    // Create uploads directory if it doesn't exist
+    if (!fs.existsSync(uploadDir)) {
+      fs.mkdirSync(uploadDir, { recursive: true });
+    }
+    cb(null, uploadDir);
+  },
+  filename: function (req, file, cb) {
+    // Create unique filename with original extension
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
+    cb(null, uniqueSuffix + path.extname(file.originalname));
   }
 });
-const upload = multer({ storage });
 
-router.post('/documentation/upload', studentAccess, upload.single('file'), async (req, res) => {
-  try {
-    if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
-
-    const { filename, mimetype, path: filePath } = req.file;
-    const user = await User.findById(req.user._id);
-    const team = await Team.findOne({ createdBy: req.user._id });
-
-    const doc = new Documentation({
-      studentId: req.user._id,
-      fileName: filename,
-      fileType: mimetype,
-      filePath,
-      sharedWithTeachers: team?.assignedTeacher || []
-    });
-
-    await doc.save();
-    res.json({ success: true, message: 'Documentation uploaded', doc });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Failed to upload documentation' });
+// Configure multer upload settings
+const upload = multer({
+  storage: storage,
+  limits: {
+    fileSize: 10 * 1024 * 1024, // 10 MB limit
+  },
+  fileFilter: function (req, file, cb) {
+    // Check file types
+    const allowedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+      'image/jpeg',
+      'image/png'
+    ];
+    
+    if (allowedTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only PDF, DOC, DOCX, TXT, JPG, and PNG files are allowed.'));
+    }
   }
+}).single('file'); // 'file' is the field name in formData
+
+// Upload documentation route
+router.post('/documentation/upload', studentAccess, (req, res) => {
+  upload(req, res, async function (err) {
+    if (err instanceof multer.MulterError) {
+      // A Multer error occurred when uploading
+      return res.status(400).json({
+        success: false,
+        message: 'File upload error: ' + err.message
+      });
+    } else if (err) {
+      // An unknown error occurred
+      return res.status(400).json({
+        success: false,
+        message: err.message
+      });
+    }
+
+    // Check if file exists
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: 'Please select a file to upload'
+      });
+    }
+
+    // Check if teacherId is provided
+    const { teacherId } = req.body;
+    if (!teacherId) {
+      return res.status(400).json({
+        success: false,
+        message: 'Teacher ID is required'
+      });
+    }
+
+    try {
+      // Create new documentation record
+      const doc = new Documentation({
+        studentId: req.user._id,
+        fileName: req.file.originalname,
+        fileType: req.file.mimetype,
+        filePath: req.file.path,
+        sharedWithTeachers: [teacherId]
+      });
+
+      await doc.save();
+
+      // Populate teacher information
+      const populatedDoc = await Documentation.findById(doc._id)
+        .populate('sharedWithTeachers', 'name email');
+
+      res.json({
+        success: true,
+        message: 'File uploaded successfully',
+        doc: populatedDoc
+      });
+    } catch (error) {
+      console.error('Documentation save error:', error);
+      res.status(500).json({
+        success: false,
+        message: 'Error saving documentation details'
+      });
+    }
+  });
 });
 
 router.get('/documentation', studentAccess, async (req, res) => {
   try {
-    const docs = await Documentation.find({ studentId: req.user._id }).populate('sharedWithTeachers', 'name email');
+    const docs = await Documentation.find({ studentId: req.user._id })
+      .populate('sharedWithTeachers', 'name email')
+      .sort({ createdAt: -1 });
+
     res.json({ success: true, docs });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ success: false, message: 'Failed to fetch documentation' });
+    console.error('Fetch docs error:', err);
+    res.status(500).json({ 
+      success: false, 
+      message: 'Failed to fetch documentation'
+    });
   }
 });
 
@@ -281,7 +384,9 @@ router.get('/team', studentAccess, async (req, res) => {
     console.error('Error fetching team:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
-});router.get('/teammember', studentAccess, async (req, res) => {
+});
+
+router.get('/teammember', studentAccess, async (req, res) => {
   const studentId = req.user._id; // ✅ Use correct variable name
 
   try {
@@ -303,8 +408,6 @@ router.get('/team', studentAccess, async (req, res) => {
   }
 });
 
-
-
 // -------------------- Team Members --------------------
 router.get('/members', studentAccess, async (req, res) => {
   try {
@@ -313,6 +416,35 @@ router.get('/members', studentAccess, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: 'Failed to fetch team members' });
+  }
+});
+
+// Search users by name or email
+router.get('/search-users', studentAccess, async (req, res) => {
+  try {
+    const { query } = req.query;
+    
+    if (!query) {
+      return res.status(400).json({ message: 'Search query is required' });
+    }
+
+    // Search for users by name or email, excluding the current user
+    const users = await User.find({
+      $and: [
+        { _id: { $ne: req.user._id } }, // Exclude current user
+        {
+          $or: [
+            { name: { $regex: query, $options: 'i' } },
+            { email: { $regex: query, $options: 'i' } }
+          ]
+        }
+      ]
+    }).select('name email role');
+
+    res.json(users);
+  } catch (error) {
+    console.error('Search users error:', error);
+    res.status(500).json({ message: 'Error searching users' });
   }
 });
 
