@@ -11,7 +11,7 @@ const server = http.createServer(app);
 
 // Replace with your actual Netlify site URL
 const allowedOrigins = [
-  'https://planova-pms.netlify.app/' // ← ADD THIS
+  'https://planova-pms.netlify.app' // ← ADD THIS
 ];
 
 app.use(cors({
