@@ -11,8 +11,6 @@ const server = http.createServer(app);
 
 // Replace with your actual Netlify site URL
 const allowedOrigins = [
-  'http://localhost:3000',
-  'http://localhost:3001',
   'https://planova-pms.netlify.app/' // ← ADD THIS
 ];
 
