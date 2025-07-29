@@ -16,7 +16,7 @@ const Documentation = () => {
   const fetchDocuments = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:8000/api/teacher/documentation', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/documentation`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Accept': 'application/json'
@@ -54,7 +54,7 @@ const Documentation = () => {
 
   const downloadFile = async (doc) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/teacher/documentation/download/${doc._id}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/documentation/download/${doc._id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -78,7 +78,7 @@ const Documentation = () => {
 
   const addComment = async (docId, comment) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/teacher/documentation/comment/${docId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/documentation/comment/${docId}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ const Documentation = () => {
 
   const updateStatus = async (docId, status) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/teacher/documentation/status/${docId}`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/documentation/status/${docId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

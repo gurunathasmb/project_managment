@@ -60,7 +60,7 @@ const SDiscussions = () => {
 
       console.log('Making API request with token:', token);
       const response = await axios.get(
-        `http://localhost:8000/api/student/search-users?query=${encodeURIComponent(query)}`,
+        `${process.env.REACT_APP_API_URL}/api/student/search-users?query=${encodeURIComponent(query)}`,
         {
           headers: {
             'Authorization': `Bearer ${token}`,
@@ -152,7 +152,7 @@ const SDiscussions = () => {
       setLoggedInUser(user);
       
       // Connect to Socket.IO server
-      socketRef.current = io('http://localhost:8000', {
+      socketRef.current = io(`${process.env.REACT_APP_API_URL}`, {
         withCredentials: true,
         transports: ['websocket', 'polling'],
         reconnection: true,

@@ -21,7 +21,7 @@ const SProjectStatus = () => {
   const fetchProjectUpdates = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:8000/api/student/project-updates', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/project-updates`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const result = await response.json();
@@ -46,7 +46,7 @@ const SProjectStatus = () => {
 
     const fetchTeachers = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/student/teacher', {
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/teacher`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         const result = await response.json();
@@ -78,7 +78,7 @@ const SProjectStatus = () => {
 
     try {
       console.log('Sending update with project name:', projectName);
-      const response = await fetch('http://localhost:8000/api/student/send-status-update', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/send-status-update`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json', 

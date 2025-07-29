@@ -24,7 +24,7 @@ function TeacherDashboard({ onLogout }) {
   const fetchAssignedStudentTeams = async (token) => {
     try {
       setLoading(true);
-      const response = await fetch('http://localhost:8000/api/teacher/teams', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/teams`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
