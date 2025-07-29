@@ -34,7 +34,7 @@ function StudentDashboard({ onLogout }) {
   const fetchStudentData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/student/profile', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error('Failed to load student data');
@@ -50,7 +50,7 @@ function StudentDashboard({ onLogout }) {
   const fetchTeamInfo = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/student/team', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/team`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -72,7 +72,7 @@ function StudentDashboard({ onLogout }) {
   const fetchAvailableTeachers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/student/teacher', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/teacher`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error('Failed to fetch teachers');
@@ -86,7 +86,7 @@ function StudentDashboard({ onLogout }) {
   const fetchAllMembers = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:8000/api/student/members', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/members`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error('Failed to fetch members');
@@ -123,7 +123,7 @@ function StudentDashboard({ onLogout }) {
 
       if (!teacherDetails) throw new Error("Selected teacher not found");
 
-      const response = await fetch('http://localhost:8000/api/student/team', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/team`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
