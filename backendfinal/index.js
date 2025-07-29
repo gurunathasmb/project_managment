@@ -8,33 +8,36 @@ require('dotenv').config();
 // Create HTTP server
 const server = http.createServer(app);
 
-// CORS configuration with specific origin and credentials
+// Replace with your actual Netlify site URL
+const allowedOrigins = [
+  'http://localhost:3000',
+  'http://localhost:3001',
+  'https://planova-pms.netlify.app/' // ← ADD THIS
+];
+
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:3001'],
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
 }));
 
-// Socket.IO configuration
-const { Server } = require('socket.io');
+// Socket.IO config update
 const io = new Server(server, {
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: allowedOrigins,
     methods: ['GET', 'POST'],
     credentials: true
   },
   transports: ['websocket', 'polling']
 });
 
-// Configure socket events
-io.on('connection', (socket) => {
-  console.log('New client connected:', socket.id);
-  
-  socket.on('disconnect', () => {
-    console.log('Client disconnected:', socket.id);
-  });
-});
 
 // MongoDB connection
 require('./Models/db');
