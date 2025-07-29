@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Base configuration
 const instance = axios.create({
-  baseURL: 'http://localhost:8000/api', // Change if using a different port or path
+  baseURL: process.env.REACT_APP_API_URL + '/api', // Change if using a different port or path
   headers: {
     'Content-Type': 'application/json',
   },

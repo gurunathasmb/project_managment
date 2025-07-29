@@ -24,7 +24,7 @@ const TProjectStatus = () => {
   const fetchStudentUpdates = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch('http://localhost:8000/api/teacher/student-updates', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/student-updates`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const result = await response.json();
@@ -84,7 +84,7 @@ const TProjectStatus = () => {
 
     try {
       setIsSending(true);
-      const response = await fetch('http://localhost:8000/api/teacher/send-comment', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/send-comment`, {
         method: 'POST',
         headers: { 
           'Content-Type': 'application/json', 

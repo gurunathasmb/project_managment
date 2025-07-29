@@ -38,7 +38,7 @@ const SDocumentation = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:8000/api/student/documentation', {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/student/documentation`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -64,7 +64,7 @@ const SDocumentation = () => {
         return;
       }
 
-      const response = await axios.get('http://localhost:8000/api/student/teammember', {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/student/teammember`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -112,7 +112,7 @@ const SDocumentation = () => {
 
         try {
           const token = localStorage.getItem('token');
-          const response = await axios.post('http://localhost:8000/api/student/documentation/upload', formData, {
+          const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/student/documentation/upload`, formData, {
             headers: {
               Authorization: `Bearer ${token}`,
               'Content-Type': 'multipart/form-data'
@@ -138,7 +138,7 @@ const SDocumentation = () => {
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`http://localhost:8000/api/student/documentation/${id}`, {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/student/documentation/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -156,7 +156,7 @@ const SDocumentation = () => {
 
   const handleDownload = (item) => {
     showNotification(`Downloading file: ${item.fileName}`);
-    const downloadUrl = `http://localhost:8000/uploads/${item.fileName}`;
+    const downloadUrl = `${process.env.REACT_APP_API_URL}/uploads/${item.fileName}`;
     window.open(downloadUrl, '_blank');
   };
 

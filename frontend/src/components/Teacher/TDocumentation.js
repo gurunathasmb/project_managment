@@ -24,14 +24,14 @@ const TDocumentation = () => {
   const fetchDocumentation = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.get(`${API_URL}/api/teacher/documents`, {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/teacher/documents`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (response.data.success) {
         const docsWithStudentNames = await Promise.all(
           response.data.docs.map(async (doc) => {
             // Fetch student info using the studentId from the populated student data
-            const studentResponse = await axios.get(`${API_URL}/api/teacher/student-updates`, {
+            const studentResponse = await axios.get(`${process.env.REACT_APP_API_URL}/api/teacher/student-updates`, {
               headers: { Authorization: `Bearer ${token}` },
             });
 
@@ -63,14 +63,14 @@ const TDocumentation = () => {
 
   const handleDownload = (item) => {
     showNotification(`Downloading file: ${item.fileName}`);
-    const downloadUrl = `${API_URL}/uploads/${item.fileName}`;
+    const downloadUrl = `${process.env.REACT_APP_API_URL}/uploads/${item.fileName}`;
     window.open(downloadUrl, '_blank');
   };
 
   const handleDelete = async (id) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await axios.delete(`${API_URL}/api/teacher/documents/${id}`, {
+      const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/teacher/documents/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 

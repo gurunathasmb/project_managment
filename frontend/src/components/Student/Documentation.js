@@ -19,7 +19,7 @@ const Documentation = () => {
 
   const fetchDocuments = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/student/documentation', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/documentation`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await response.json();
@@ -33,7 +33,7 @@ const Documentation = () => {
 
   const fetchTeachers = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/student/teacher', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/teacher`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const data = await response.json();
@@ -61,7 +61,7 @@ const Documentation = () => {
     formData.append('teacherId', selectedTeacher);
 
     try {
-      const response = await fetch('http://localhost:8000/api/student/documentation/upload', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/documentation/upload`, {
         method: 'POST',
         headers: { 
           Authorization: `Bearer ${token}`
