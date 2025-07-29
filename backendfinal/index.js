@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const http = require('http');
 require('dotenv').config();
+const { Server } = require('socket.io');
 
 // Create HTTP server
 const server = http.createServer(app);
