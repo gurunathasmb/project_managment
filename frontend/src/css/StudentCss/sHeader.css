@@ -1,9 +1,10 @@
+/* ================= HEADER ================= */
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 16px 24px;
-  background-color: #fff;
+  background-color: #ffffff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
@@ -11,8 +12,10 @@
   font-size: 1.5rem;
   font-weight: 500;
   margin: 0;
+  color: #000000;
 }
 
+/* ================= HEADER TOOLS ================= */
 .header-tools {
   display: flex;
   align-items: center;
@@ -24,6 +27,7 @@
   gap: 12px;
 }
 
+/* ================= TOOL ICONS ================= */
 .tool-icon {
   width: 36px;
   height: 36px;
@@ -42,18 +46,21 @@
 
 .tool-icon span {
   font-size: 1.25rem;
+  color: #000000;
 }
 
+/* ================= USER INFO ================= */
 .user-info {
   position: relative;
 }
 
+/* ================= AVATAR ================= */
 .avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   background-color: #6c5ce7;
-  color: white;
+  color: #ffffff;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -66,41 +73,53 @@
   background-color: #5d4fd1;
 }
 
+/* ================= DROPDOWN ================= */
 .user-dropdown {
   position: absolute;
   top: 50px;
   right: 0;
   width: 200px;
-  background-color: white;
-  border-radius: 4px;
+  background-color: #ffffff;
+  color: #000000; /* 🔥 FIX: text visible */
+  border-radius: 6px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   z-index: 1000;
   overflow: hidden;
 }
 
+/* ================= DROPDOWN HEADER ================= */
 .dropdown-header {
   padding: 16px;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eeeeee;
 }
 
 .dropdown-header h3 {
   margin: 0;
   font-size: 0.95rem;
   font-weight: 500;
+  color: #000000; /* 🔥 FIX */
 }
 
+/* ================= DROPDOWN ITEMS ================= */
 .dropdown-item {
   padding: 12px 16px;
   font-size: 0.875rem;
   cursor: pointer;
   transition: background-color 0.2s;
+  color: #000000; /* 🔥 FIX */
 }
 
 .dropdown-item:hover {
   background-color: #f5f5f5;
+  color: #000000;
 }
 
+/* ================= LOGOUT ================= */
 .dropdown-item.logout {
-  border-top: 1px solid #eee;
+  border-top: 1px solid #eeeeee;
   color: #e74c3c;
+}
+
+.dropdown-item.logout:hover {
+  background-color: #fdecea;
 }
