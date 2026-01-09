@@ -1,26 +1,111 @@
-.profile-box {
-    background: white;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-  
-  .profile-box h3 {
-    margin-bottom: 20px;
-    color: #2e3b4e;
-  }
-  
-  .profile-box label {
-    font-weight: 600;
-  }
-  
-  .profile-box input {
-    display: block;
-    width: 100%;
-    margin-bottom: 16px;
-    padding: 10px;
-    font-size: 16px;
-    border-radius: 6px;
-    border: 1px solid #ccc;
-  }
-  
+/* ================= PROFILE CARD ================= */
+
+.profile-card {
+  max-width: 600px;
+  background: #ffffff;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+/* ================= PROFILE ROWS (VIEW MODE) ================= */
+
+.profile-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+/* Label (left side) */
+.profile-row span {
+  font-weight: 600;
+  color: #444;              /* label color */
+}
+
+/* Value (right side) */
+.profile-row p {
+  margin: 0;
+  font-weight: 500;
+  color: #111;              /* ✅ FIX: readable text */
+  background: transparent;  /* remove purple / white blocks */
+}
+
+/* ================= EDIT MODE FORM ================= */
+
+.profile-card .form-group {
+  margin-bottom: 18px;
+}
+
+.profile-card label {
+  display: block;
+  font-weight: 500;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+.profile-card input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  color: #111;              /* ✅ visible input text */
+  background: #ffffff;
+}
+
+.profile-card input:focus {
+  outline: none;
+  border-color: #7e3ff2;
+  box-shadow: 0 0 0 2px rgba(126, 63, 242, 0.2);
+}
+
+/* Disabled input (view-only feel) */
+.profile-card input:disabled {
+  background: #f3f3f3;
+  color: #111;
+  cursor: not-allowed;
+}
+
+/* ================= BUTTONS ================= */
+
+.edit-btn,
+.save-btn {
+  margin-top: 20px;
+  background: #7e3ff2;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.edit-btn:hover,
+.save-btn:hover {
+  background: #6b32d6;
+}
+
+/* Cancel button */
+.cancel-btn {
+  margin-left: 10px;
+  background: #cccccc;
+  color: #333333;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+
+.cancel-btn:hover {
+  background: #b5b5b5;
+}
+
+/* ================= SAFETY OVERRIDE ================= */
+/* Prevents global / modal CSS from breaking profile again */
+
+.profile-card * {
+  color: inherit;
+  box-sizing: border-box;
+}

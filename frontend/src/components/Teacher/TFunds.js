@@ -11,7 +11,7 @@ function TFunds({ user, onLogout }) {
   const [activeTab, setActiveTab] = useState('Pending');
   const [expandedRequestId, setExpandedRequestId] = useState(null);
   const [decisionNotes, setDecisionNotes] = useState('');
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
   useEffect(() => {
     loadFundingRequests();
   }, []);
@@ -34,8 +34,8 @@ function TFunds({ user, onLogout }) {
   // Handle decision (approve/reject) on a funding request
   const handleRequestDecision = async (requestId, decision) => {
     try {
-      await axios.post('/teacher/funds/assign', {
-        fundId: requestId,
+      // Changed endpoint to match what your backend expects
+      await axios.put(`/teacher/funds/${requestId}`, {
         status: decision,
         teacherComments: decisionNotes
       }, {
@@ -50,7 +50,7 @@ function TFunds({ user, onLogout }) {
       setExpandedRequestId(null);
     } catch (error) {
       console.error("Error processing decision:", error);
-      toast.error("Failed to process your decision");
+      toast.error(error.response?.data?.message || "Failed to process your decision");
     }
   };
 

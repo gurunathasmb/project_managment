@@ -1,41 +1,112 @@
 import React, { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { handleSuccess } from '../../utils';
 import Sidebar from './SSidebar';
-// import '../../css/StudentCss/StudentDashboardLayout.css';
+import { handleSuccess, handleError } from '../../utils';
 import '../../css/StudentCss/sProfile.css';
 
 const SProfile = () => {
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const token = localStorage.getItem('token');
 
+  const [formData, setFormData] = useState({
+    name: '',
+    department: '',
+    semester: '',
+    phone: '',
+    usn: '',
+    skills: ''
+  });
+
+  // Fetch profile
   useEffect(() => {
-    const userData = localStorage.getItem('loggedInUser');
-    if (userData) {
-      setLoggedInUser(JSON.parse(userData));
-    }
-  }, []);
+    fetch(`${process.env.REACT_APP_API_URL}/api/student/profile`, {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setUser(data.user);
+        setFormData({
+          name: data.user.name || '',
+          department: data.user.department || '',
+          semester: data.user.semester || '',
+          phone: data.user.phone || '',
+          usn: data.user.usn || '',
+          skills: data.user.skills || ''
+        });
+      })
+      .catch(() => handleError('Failed to load profile'));
+  }, [token]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('loggedInUser');
-    handleSuccess('User Loggedout');
-    setTimeout(() => {
-      navigate('/login');
-    }, 1000);
+  // Handle save
+  const handleSave = async () => {
+    try {
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/student/profile/update`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
+
+      const result = await res.json();
+      if (result.success) {
+        setUser(result.user);
+        setIsEditing(false);
+        handleSuccess('Profile updated successfully');
+      } else {
+        handleError(result.message);
+      }
+    } catch {
+      handleError('Update failed');
+    }
   };
+
+  if (!user) return null;
 
   return (
     <div className="student-dashboard-container">
-      <Sidebar onLogout={handleLogout} />
+      <Sidebar />
       <div className="content-area">
-        <h1>Welcome, {loggedInUser?.name}</h1>
-        <h2>Profile</h2>
-        {/* Add student's profile details, edit option, avatar, etc. */}
-        <p>This section can show and allow editing of student profile details.</p>
+        <h1>My Profile</h1>
+
+        {/* ================= VIEW MODE ================= */}
+        {!isEditing && (
+          <div className="profile-card">
+            <div className="profile-row"><span>Name</span><p>{user.name}</p></div>
+            <div className="profile-row"><span>Email</span><p>{user.email}</p></div>
+            <div className="profile-row"><span>Department</span><p>{user.department || '-'}</p></div>
+            <div className="profile-row"><span>Semester</span><p>{user.semester || '-'}</p></div>
+            <div className="profile-row"><span>Phone</span><p>{user.phone || '-'}</p></div>
+            <div className="profile-row"><span>USN</span><p>{user.usn || '-'}</p></div>
+            <div className="profile-row"><span>Skills</span><p>{user.skills || '-'}</p></div>
+
+            <button className="edit-btn" onClick={() => setIsEditing(true)}>
+              Edit Profile
+            </button>
+          </div>
+        )}
+
+        {/* ================= EDIT MODE ================= */}
+        {isEditing && (
+          <div className="profile-form">
+            {Object.keys(formData).map(key => (
+              <div className="form-group" key={key}>
+                <label>{key.toUpperCase()}</label>
+                <input
+                  value={formData[key]}
+                  onChange={e => setFormData({ ...formData, [key]: e.target.value })}
+                />
+              </div>
+            ))}
+
+            <div className="profile-actions">
+              <button className="save-btn" onClick={handleSave}>Save</button>
+              <button className="cancel-btn" onClick={() => setIsEditing(false)}>Cancel</button>
+            </div>
+          </div>
+        )}
       </div>
-      <ToastContainer />
     </div>
   );
 };

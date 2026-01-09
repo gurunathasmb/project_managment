@@ -283,3 +283,55 @@
   border: 1px solid #e0e7ff;
   margin-bottom: 0.5rem;
 }
+.profile-row p {
+  color: #111;
+}
+/* ===== FORCE TEXT VISIBILITY FIX ===== */
+
+/* General text inside project status page */
+.status-update-section *,
+.updates-history-section * {
+  color: #111827; /* near-black */
+}
+
+/* Update message text */
+.update-text,
+.update-item p {
+  color: #111827;
+}
+
+/* Teacher / Student labels */
+.update-item strong,
+.comment-header strong {
+  color: #111827;
+}
+
+/* Comments text */
+.comment-text {
+  color: #111827;
+}
+
+/* Section labels like "Teacher", "Comments", "Message" */
+.updates-history-section h4,
+.updates-history-section h3,
+.updates-history-section span,
+.updates-history-section label {
+  color: #111827;
+}
+
+/* Timestamp visibility */
+.timestamp {
+  color: #374151; /* dark gray */
+}
+
+/* Fix purple tag-like text if any */
+.project-name,
+.comment-count {
+  color: #1f2937;
+}
+
+/* Profile row text (already partly done, reinforcing) */
+.profile-row span,
+.profile-row p {
+  color: #111827;
+}

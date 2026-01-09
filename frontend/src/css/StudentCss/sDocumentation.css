@@ -215,3 +215,8 @@
     gap: 10px;
   }
 }
+/* FORCE FILE NAME TEXT TO BLACK */
+.folder-column.name {
+  color: #000 !important;
+  font-weight: 500;
+}

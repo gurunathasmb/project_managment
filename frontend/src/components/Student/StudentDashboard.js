@@ -50,24 +50,25 @@ function StudentDashboard({ onLogout }) {
   const fetchTeamInfo = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/student/team`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (response.status === 404) return setHasTeam(false);
-      if (!response.ok) throw new Error('Failed to load team info');
-
-      const data = await response.json();
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/student/teammember`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+  
+      if (res.status === 404) return setHasTeam(false);
+  
+      const data = await res.json();
       const team = data.team;
-
+  
       setTeamName(team.teamName);
       setTeamMembers(team.teamMembers.map(m => m.name));
       setAssignedTeachers([team.assignedTeacher]);
       setHasTeam(true);
-    } catch (err) {
-      console.error('Error fetching team:', err);
+    } catch (e) {
+      console.error(e);
     }
   };
+  
 
   const fetchAvailableTeachers = async () => {
     try {

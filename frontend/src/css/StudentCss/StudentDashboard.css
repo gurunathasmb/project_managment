@@ -260,3 +260,52 @@ html, body, #root {
   gap: 12px;
   margin-top: 25px;
 }
+/* ===== FORCE TEXT COLOR FIX : TEAM MODAL ===== */
+
+/* Modal container text */
+.team-form,
+.team-form * {
+  color: #111827; /* solid black */
+}
+
+/* Input text */
+.team-form input {
+  color: #111827;
+}
+
+/* Placeholder text */
+.team-form input::placeholder {
+  color: #6b7280;
+}
+
+/* Section headings */
+.team-form h2,
+.team-form h3,
+.team-form h4,
+.team-form label {
+  color: #111827;
+}
+
+/* Member / teacher chips */
+.members-list li,
+.teachers-list li {
+  color: #111827;
+}
+
+/* Purple tags inside modal */
+.members-list li span,
+.teachers-list li span {
+  color: #111827;
+}
+
+/* Remove (X) button */
+.remove-member,
+.remove-teacher {
+  color: #dc2626;
+}
+
+/* Search inputs */
+.add-member input,
+.add-teacher input {
+  color: #111827;
+}
