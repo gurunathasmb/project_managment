@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from './TSidebar';
 import Header from './THeader';
 import '../../css/TeacherCss/TeacherDashboard.css';
 
 function TeacherDashboard({ onLogout }) {
+  const navigate = useNavigate();
+
   const [user, setUser] = useState(null);
   const [assignedStudentTeams, setAssignedStudentTeams] = useState([]);
   const [expandedTeam, setExpandedTeam] = useState(null);
@@ -18,28 +21,31 @@ function TeacherDashboard({ onLogout }) {
       const parsedUser = JSON.parse(loggedInUser);
       setUser(parsedUser);
       fetchAssignedStudentTeams(token);
+    } else {
+      setLoading(false);
+      setError('Not logged in');
     }
   }, []);
 
   const fetchAssignedStudentTeams = async (token) => {
     try {
       setLoading(true);
+      setError(null);
+
       const response = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/teams`, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` }
       });
 
       const data = await response.json();
 
       if (data.success) {
-        setAssignedStudentTeams(data.teams);
+        setAssignedStudentTeams(data.teams || []);
       } else {
-        setError('Failed to fetch assigned teams.');
+        setError(data.message || 'Failed to fetch assigned teams.');
       }
     } catch (error) {
-      setError('Error fetching assigned teams. Please try again later.');
       console.error('Error fetching assigned teams:', error);
+      setError('Error fetching assigned teams. Please try again later.');
     } finally {
       setLoading(false);
     }
@@ -49,14 +55,19 @@ function TeacherDashboard({ onLogout }) {
     setExpandedTeam(expandedTeam === index ? null : index);
   };
 
+  // ✅ SPA navigation instead of hard reload
   const handleContactTeam = (teamId) => {
-    // Navigate to discussions or messaging interface
-    window.location.href = `/teacher/discussions?teamId=${teamId}`;
+    navigate(`/teacher/discussions?teamId=${teamId}`);
   };
 
-  const handleViewProgress = (teamId) => {
-    // Navigate to team progress page
-    window.location.href = `/teacher/project-status?teamId=${teamId}`;
+  // ✅ SPA navigation instead of hard reload
+  const handleOpenWorkspace = (teamId) => {
+    navigate(`/teacher/project-status?teamId=${teamId}`);
+  };
+
+  const getTeamLeadName = (team) => {
+    if (team?.createdBy?.name) return team.createdBy.name;
+    return 'Team Leader';
   };
 
   if (loading) {
@@ -78,17 +89,17 @@ function TeacherDashboard({ onLogout }) {
       <Sidebar onLogout={onLogout} />
       <div className="main-content">
         <Header user={user} />
+
         <div className="dashboard-content">
           <div className="welcome-box">
             <h2>Welcome Back, {user?.name || 'Teacher'}</h2>
-            <p>You have {assignedStudentTeams.length} team{assignedStudentTeams.length !== 1 ? 's' : ''} assigned to you.</p>
+            <p>
+              You have {assignedStudentTeams.length} team
+              {assignedStudentTeams.length !== 1 ? 's' : ''} assigned to you.
+            </p>
           </div>
 
-          {error && (
-            <div className="error-message">
-              {error}
-            </div>
-          )}
+          {error && <div className="error-message">{error}</div>}
 
           <div className="assigned-teams-section">
             <h2>Student Teams Assigned to You</h2>
@@ -102,8 +113,8 @@ function TeacherDashboard({ onLogout }) {
               <div className="student-teams-list">
                 {assignedStudentTeams.map((team, index) => (
                   <div className="student-team-card" key={team._id}>
-                    <div 
-                      className={`team-card-header ${expandedTeam === index ? 'expanded' : ''}`} 
+                    <div
+                      className={`team-card-header ${expandedTeam === index ? 'expanded' : ''}`}
                       onClick={() => toggleExpandTeam(index)}
                     >
                       <div className="team-header-info">
@@ -130,6 +141,7 @@ function TeacherDashboard({ onLogout }) {
                             ))}
                           </ul>
                         </div>
+
                         <div className="team-info-grid">
                           <div className="team-info-item">
                             <h4>Created On:</h4>
@@ -137,21 +149,23 @@ function TeacherDashboard({ onLogout }) {
                           </div>
                           <div className="team-info-item">
                             <h4>Team Lead:</h4>
-                            <p>{team.teamMembers.find(m => m._id === team.createdBy)?.name || 'Not specified'}</p>
+                            <p>{getTeamLeadName(team)}</p>
                           </div>
                         </div>
+
                         <div className="team-actions">
-                          <button 
+                          <button
                             className="contact-team-button"
                             onClick={() => handleContactTeam(team._id)}
                           >
                             Contact Team
                           </button>
-                          <button 
+
+                          <button
                             className="view-progress-button"
-                            onClick={() => handleViewProgress(team._id)}
+                            onClick={() => handleOpenWorkspace(team._id)}
                           >
-                            View Progress
+                            Open Workspace
                           </button>
                         </div>
                       </div>
@@ -172,14 +186,14 @@ function TeacherDashboard({ onLogout }) {
               <div className="update-card">
                 <h3>Recent Activity</h3>
                 <p>
-                  {assignedStudentTeams.length > 0 
+                  {assignedStudentTeams.length > 0
                     ? `Latest team joined: ${assignedStudentTeams[assignedStudentTeams.length - 1]?.teamName}`
-                    : 'No recent team assignments.'
-                  }
+                    : 'No recent team assignments.'}
                 </p>
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </div>

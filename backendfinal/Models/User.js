@@ -6,11 +6,18 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: { type: String, enum: ['student', 'teacher'], default: 'student' },
 
-  // 🔽 NEW PROFILE FIELDS
+  // Common Profile Fields
   department: { type: String },
-  semester: { type: String },
   phone: { type: String },
-  usn: { type: String }
+  skills: { type: String }, // ✅ add this
+
+  // Student-only
+  semester: { type: String },
+  usn: { type: String },
+
+  // Teacher-only (optional)
+  designation: { type: String },
+  employeeId: { type: String }
 });
 
 module.exports = mongoose.model('User', UserSchema);

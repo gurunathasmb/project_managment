@@ -402,3 +402,190 @@
   border-top: 1px solid #e2e8f0;
   margin-top: 1rem;
 }
+/* ================================
+   TEAM WORKSPACE (NEW STYLES)
+================================ */
+
+/* Make workspace content look like proper sections instead of random text */
+.team-workspace-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* Nice section cards */
+.workspace-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.workspace-card h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.workspace-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .workspace-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.workspace-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: flex-start;
+  line-height: 1.5;
+}
+
+.workspace-row strong {
+  min-width: 150px;
+  color: #334155;
+  font-weight: 700;
+}
+
+.workspace-row span,
+.workspace-row a {
+  color: #0f172a;
+  word-break: break-word;
+}
+
+/* Links look clickable */
+.workspace-row a {
+  color: #2563eb;
+  text-decoration: underline;
+}
+
+.workspace-row a:hover {
+  color: #1d4ed8;
+}
+
+/* Long text blocks (Problem statement / description) */
+.workspace-longtext {
+  grid-column: 1 / -1;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+/* Milestones */
+.milestone-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.milestone-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-left: 4px solid #6366f1;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.milestone-item strong {
+  color: #0f172a;
+}
+
+.milestone-meta {
+  margin-top: 0.35rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* Documents */
+.doc-list {
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.doc-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+}
+
+.doc-item strong {
+  color: #0f172a;
+}
+
+.doc-meta {
+  margin-top: 0.35rem;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+/* For the new workspace updates container */
+.workspace-updates-container {
+  display: flex;
+  gap: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+@media (max-width: 1024px) {
+  .workspace-updates-container {
+    flex-direction: column;
+  }
+}
+/* FORCE BLACK TEXT inside Team Workspace cards */
+.team-workspace-wrapper,
+.team-workspace-wrapper * {
+  color: #0f172a !important;
+}
+
+/* If any background highlight is coming from old styles, neutralize it */
+.team-workspace-wrapper p,
+.team-workspace-wrapper strong,
+.team-workspace-wrapper span,
+.team-workspace-wrapper h2,
+.team-workspace-wrapper h3,
+.team-workspace-wrapper h4,
+.team-workspace-wrapper li,
+.team-workspace-wrapper a {
+  background: transparent !important;
+}
+
+/* keep links blue */
+.team-workspace-wrapper a {
+  color: #2563eb !important;
+  text-decoration: underline;
+}
+.rubric-score-view {
+  padding: 10px 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  font-weight: 600;
+  width: 100%;
+  text-align: center;
+}
+
+.rubric-remarks-view {
+  padding: 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #f8fafc;
+  white-space: pre-wrap;
+}

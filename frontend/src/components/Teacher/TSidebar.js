@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../../css/TeacherCss/tSidebar.css';
 
-// SVG Icons as components
+// SVG Icons
 const HomeIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
     <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -36,7 +36,12 @@ const DocIcon = () => (
   </svg>
 );
 
-
+const ProfileIcon = () => (
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+    <circle cx="12" cy="7" r="4"></circle>
+  </svg>
+);
 
 const LogoutIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -46,11 +51,36 @@ const LogoutIcon = () => (
   </svg>
 );
 
-
 function Sidebar({ onLogout }) {
   const location = useLocation();
+  const [loadingProject, setLoadingProject] = useState(false);
 
-  const isActive = (path) => location.pathname === path;
+  const isActivePath = (path) => location.pathname === path;
+
+  const openProjectStatus = async () => {
+    try {
+      setLoadingProject(true);
+      const token = localStorage.getItem('token');
+
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/teams`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+
+      const data = await res.json();
+
+      if (data.success && data.teams?.length > 0) {
+        window.location.assign(`/teacher/project-status?teamId=${data.teams[0]._id}`);
+      } else {
+        window.location.assign(`/teacher/project-status`);
+      }
+    } catch (e) {
+      window.location.assign(`/teacher/project-status`);
+    } finally {
+      setLoadingProject(false);
+    }
+  };
+
+  const projectActive = isActivePath('/teacher/project-status');
 
   return (
     <div className="sidebar">
@@ -61,33 +91,52 @@ function Sidebar({ onLogout }) {
         </div>
       </div>
 
-        <div className="nav-menu">
-             <Link to="/teacher/dashboard" className={`nav-item ${isActive('/teacher/dashboard') ? 'active' : ''}`}>
-               <span className="icon"><HomeIcon /></span>
-               <span className="text">Dashboard</span>
-             </Link>
+      <div className="nav-menu">
+        <Link
+          to="/teacher/dashboard"
+          className={`nav-item ${isActivePath('/teacher/dashboard') ? 'active' : ''}`}
+        >
+          <span className="icon"><HomeIcon /></span>
+          <span className="text">Dashboard</span>
+        </Link>
 
-         <Link to="/teacher/project-status" className={`nav-item ${isActive('/teacher/project-status') ? 'active' : ''}`}>
-                  <span className="icon"><ChartIcon /></span>
-                  <span className="text">Project Status</span>
-                </Link>
+        <button
+          type="button"
+          className={`nav-item nav-btn ${projectActive ? 'active' : ''}`}
+          onClick={openProjectStatus}
+          disabled={loadingProject}
+        >
+          <span className="icon"><ChartIcon /></span>
+          <span className="text">{loadingProject ? 'Loading...' : 'Project Status'}</span>
+        </button>
 
-         <Link to="/teacher/funds" className={`nav-item ${isActive('/teacher/funds') ? 'active' : ''}`}>
-                  <span className="icon"><FundsIcon /></span>
-                  <span className="text">Funds</span>
-                </Link>
-        
+        <Link
+          to="/teacher/funds"
+          className={`nav-item ${isActivePath('/teacher/funds') ? 'active' : ''}`}
+        >
+          <span className="icon"><FundsIcon /></span>
+          <span className="text">Funds</span>
+        </Link>
 
-       
-               <Link to="/teacher/documentation" className={`nav-item ${isActive('/teacher/documentation') ? 'active' : ''}`}>
-                 <span className="icon"><DocIcon /></span>
-                 <span className="text">Documentation</span>
-               </Link>
+        <Link
+          to="/teacher/documentation"
+          className={`nav-item ${isActivePath('/teacher/documentation') ? 'active' : ''}`}
+        >
+          <span className="icon"><DocIcon /></span>
+          <span className="text">Documentation</span>
+        </Link>
 
-        
-             </div>
-       
-             <div className="sidebar-footer">
+        {/* ✅ NEW: PROFILE */}
+        <Link
+          to="/teacher/profile"
+          className={`nav-item ${isActivePath('/teacher/profile') ? 'active' : ''}`}
+        >
+          <span className="icon"><ProfileIcon /></span>
+          <span className="text">Profile</span>
+        </Link>
+      </div>
+
+      <div className="sidebar-footer">
         <button className="nav-item logout-button" onClick={onLogout}>
           <span className="icon"><LogoutIcon /></span>
           <span className="text">Log Out</span>
