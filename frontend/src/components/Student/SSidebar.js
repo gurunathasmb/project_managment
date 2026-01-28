@@ -1,5 +1,6 @@
 import React from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { logout } from '../../utils';
 import '../../css/StudentCss/sSidebar.css';
 
 // SVG Icons as components
@@ -70,8 +71,10 @@ const LogoutIcon = () => (
   </svg>
 );
 
-function Sidebar({ onLogout }) {
+function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+
   const isActive = (path) => location.pathname === path;
 
   return (
@@ -109,15 +112,18 @@ function Sidebar({ onLogout }) {
           <span className="text">Discussion Page</span>
         </Link>
 
-        {/* ✅ NEW PROFILE LINK */}
         <Link to="/student/profile" className={`nav-item ${isActive('/student/profile') ? 'active' : ''}`}>
           <span className="icon"><ProfileIcon /></span>
           <span className="text">Profile</span>
         </Link>
       </div>
 
+      {/* ✅ LOGOUT FIX */}
       <div className="sidebar-footer">
-        <button className="nav-item logout-button" onClick={onLogout}>
+        <button
+          className="nav-item logout-button"
+          onClick={() => logout(navigate)}
+        >
           <span className="icon"><LogoutIcon /></span>
           <span className="text">Log Out</span>
         </button>

@@ -42,6 +42,11 @@ const TProjectStatus = () => {
   const [rubricLoading, setRubricLoading] = useState(false);
   const [rubricLocked, setRubricLocked] = useState(false);
 
+  // ✅ AI Progress states
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiRunning, setAiRunning] = useState(false);
+  const [aiEvaluation, setAiEvaluation] = useState(null);
+
   const formatDate = (date) =>
     new Date(date).toLocaleString('en-US', {
       year: 'numeric',
@@ -147,11 +152,57 @@ const TProjectStatus = () => {
     }
   };
 
-  // ✅ Load workspace + rubric whenever teamId or phase changes
+  // ✅ AI: fetch saved evaluation for team+phase
+  const fetchAIProgress = async (tid, ph) => {
+    if (!tid) return;
+    try {
+      setAiLoading(true);
+      const res = await fetch(
+        `${process.env.REACT_APP_API_URL}/api/teacher/ai-progress?teamId=${tid}&phase=${ph}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      const data = await res.json();
+
+      if (data.success) setAiEvaluation(data.evaluation || null);
+      else setAiEvaluation(null);
+    } catch (e) {
+      setAiEvaluation(null);
+    } finally {
+      setAiLoading(false);
+    }
+  };
+
+  // ✅ AI: run evaluation and save in DB
+  const runAIProgress = async () => {
+    if (!teamId) return;
+    try {
+      setAiRunning(true);
+      const res = await fetch(`${process.env.REACT_APP_API_URL}/api/teacher/ai-progress/run`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ teamId, phase })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        handleSuccess('AI progress generated');
+        setAiEvaluation(data.evaluation || null);
+      } else {
+        handleError(data.message || 'Failed to generate AI progress');
+      }
+    } catch (e) {
+      handleError('Failed to generate AI progress');
+    } finally {
+      setAiRunning(false);
+    }
+  };
+
+  // ✅ Load workspace + rubric + AI whenever teamId or phase changes
   useEffect(() => {
     if (!teamId) return;
     fetchTeamWorkspace(teamId);
     fetchRubric(teamId, phase);
+    fetchAIProgress(teamId, phase);
     setSelectedUpdate(null);
     setCommentText('');
     // eslint-disable-next-line
@@ -349,10 +400,24 @@ const TProjectStatus = () => {
             <ul className="comments-list">
               {docs.map(d => (
                 <li key={d._id} className="comment-item">
-                  <strong>{d.fileName}</strong>
-                  <p>{d.description || ''}</p>
-                  <small>By: {d.studentId?.name || 'Student'} | {formatDate(d.createdAt)}</small>
-                </li>
+                <strong>
+                  <a
+                    href={`${process.env.REACT_APP_API_URL}/uploads/${d.fileName}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    download
+                    style={{ color: '#2563eb', textDecoration: 'underline' }}
+                  >
+                    {d.fileName}
+                  </a>
+                </strong>
+              
+                {d.description && <p>{d.description}</p>}
+              
+                <small>
+                  By: {d.studentId?.name || 'Student'} | {formatDate(d.createdAt)}
+                </small>
+              </li>
               ))}
             </ul>
           )}
@@ -475,6 +540,81 @@ const TProjectStatus = () => {
               >
                 {rubricLocked ? 'Saved' : 'Save Evaluation'}
               </button>
+
+              {/* ✅ AI PROGRESS (AFTER RUBRIC SAVE BUTTON) */}
+              <div style={{ marginTop: 16, borderTop: '1px solid #e2e8f0', paddingTop: 16 }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12 }}>
+                  <h3 style={{ margin: 0 }}>AI Progress Evaluation</h3>
+
+                  <button
+                    type="button"
+                    className="submit-button"
+                    onClick={runAIProgress}
+                    disabled={aiRunning || aiLoading}
+                    style={{ padding: '8px 12px' }}
+                  >
+                    {aiRunning ? 'Generating...' : 'Generate AI Progress'}
+                  </button>
+                </div>
+
+                {aiLoading ? (
+                  <div className="loading-state" style={{ marginTop: 10 }}>Loading AI progress...</div>
+                ) : !aiEvaluation ? (
+                  <div className="empty-state" style={{ marginTop: 10 }}>
+                    <p>No AI progress generated yet</p>
+                    <span>Click “Generate AI Progress” to create evaluation for this phase.</span>
+                  </div>
+                ) : (
+                  <div style={{ marginTop: 12 }}>
+                    <div style={{ fontWeight: 700, marginBottom: 8 }}>
+                      Score: {aiEvaluation.progressScore}/100
+                    </div>
+
+                    {aiEvaluation.summary && (
+                      <div style={{ marginBottom: 12 }}>
+                        <strong>Summary:</strong>
+                        <div style={{ marginTop: 6 }}>{aiEvaluation.summary}</div>
+                      </div>
+                    )}
+
+                    {Array.isArray(aiEvaluation.strengths) && aiEvaluation.strengths.length > 0 && (
+                      <div style={{ marginBottom: 12 }}>
+                        <strong>Strengths:</strong>
+                        <ul style={{ marginTop: 6 }}>
+                          {aiEvaluation.strengths.map((s, i) => <li key={i}>{s}</li>)}
+                        </ul>
+                      </div>
+                    )}
+
+                    {Array.isArray(aiEvaluation.risks) && aiEvaluation.risks.length > 0 && (
+                      <div style={{ marginBottom: 12 }}>
+                        <strong>Risks:</strong>
+                        <ul style={{ marginTop: 6 }}>
+                          {aiEvaluation.risks.map((s, i) => <li key={i}>{s}</li>)}
+                        </ul>
+                      </div>
+                    )}
+
+                    {Array.isArray(aiEvaluation.nextActions) && aiEvaluation.nextActions.length > 0 && (
+                      <div style={{ marginBottom: 12 }}>
+                        <strong>Next Actions:</strong>
+                        <ul style={{ marginTop: 6 }}>
+                          {aiEvaluation.nextActions.map((s, i) => <li key={i}>{s}</li>)}
+                        </ul>
+                      </div>
+                    )}
+
+                    {Array.isArray(aiEvaluation.missingInfo) && aiEvaluation.missingInfo.length > 0 && (
+                      <div style={{ marginBottom: 0 }}>
+                        <strong>Missing Info:</strong>
+                        <ul style={{ marginTop: 6 }}>
+                          {aiEvaluation.missingInfo.map((s, i) => <li key={i}>{s}</li>)}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </>
           )}
         </div>

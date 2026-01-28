@@ -20,6 +20,7 @@ import TProjectStatus from './components/Teacher/TProjectStatus';
 import TDocumentation from './components/Teacher/TDocumentation';
 import TFunds from './components/Teacher/TFunds';
 import TProfile from './components/Teacher/TProfile';
+import TGlobalProjects from './components/Teacher/TGlobalProjects';
 
 function App() {
   const PrivateRoute = ({ element, allowedRole }) => {
@@ -49,6 +50,7 @@ function App() {
         <Route path="/teacher/documentation" element={<PrivateRoute element={<TDocumentation />} allowedRole="teacher" />} />
         <Route path="/teacher/funds" element={<PrivateRoute element={<TFunds />} allowedRole="teacher" />} />
         <Route path="/teacher/profile" element={<PrivateRoute element={<TProfile />} allowedRole="teacher" />} />
+        <Route path="/teacher/global-projects" element={<PrivateRoute element={<TGlobalProjects />} allowedRole="teacher" />}/>
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" />} />

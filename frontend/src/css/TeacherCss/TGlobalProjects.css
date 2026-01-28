@@ -1,0 +1,75 @@
+/* Global Projects Page */
+
+.dashboard-content h2 {
+    margin-bottom: 16px;
+    color: #1f2937;
+  }
+  
+  /* Error message */
+  .error-message {
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 10px;
+    border-radius: 6px;
+    margin-top: 10px;
+  }
+  
+  /* Table styling */
+  .global-projects-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  
+  /* Header */
+  .global-projects-table thead {
+    background-color: #f3f4f6;
+  }
+  
+  .global-projects-table th {
+    text-align: left;
+    padding: 12px 14px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+  }
+  
+  /* Rows */
+  .global-projects-table td {
+    padding: 12px 14px;
+    font-size: 14px;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+    vertical-align: top;
+  }
+  
+  /* Zebra effect */
+  .global-projects-table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+  }
+  
+  /* Hover */
+  .global-projects-table tbody tr:hover {
+    background-color: #eef2ff;
+  }
+  
+  /* Empty state */
+  .global-projects-table tbody tr td {
+    line-height: 1.5;
+  }
+  
+  /* Responsive (simple) */
+  @media (max-width: 1024px) {
+    .global-projects-table {
+      font-size: 13px;
+    }
+  
+    .global-projects-table th,
+    .global-projects-table td {
+      padding: 10px;
+    }
+  }
