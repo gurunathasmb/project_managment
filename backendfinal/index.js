@@ -12,7 +12,8 @@ const server = http.createServer(app);
 // Allowed origins (LOCAL + PRODUCTION)
 const allowedOrigins = [
   'http://localhost:3000',
-  'https://planova-pms.netlify.app'
+  'https://planova-pms.netlify.app',
+  'https://planova-workspace.netlify.app'
 ];
 
 // CORS middleware (BEFORE routes)
